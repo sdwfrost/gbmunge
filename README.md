@@ -55,3 +55,7 @@ JX869059|JX869059|30119|2012-12-04|Homo sapiens|NA|NA|NA|2012-06-13
 KC164505|KC164505|30111|2013-07-12|Homo sapiens|United Kingdom|United Kingdom|GBR|2012-09-11
 KC667074|KC667074|30112|2013-04-30|Homo sapiens|United Kingdom: England|United Kingdom|GBR|2012-09-19
 KC776174|KC776174|30030|2013-03-25|Homo sapiens|Jordan|Jordan|JOR|2012-04
+
+## Credits
+
+This code uses a slightly modified version of the [GBParsy](https://link.springer.com/article/10.1186/1471-2105-9-321) parser downloaded from the [Google Code Archive](https://code.google.com/archive/p/gbfp/). I found that the parsing of the LOCUS field wasn't working properly.
