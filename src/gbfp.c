@@ -31,7 +31,7 @@ regex_t ptRegExGI;
 
 /* Initializes regular expression */
 void initRegEx(void) {
-    const char sLocus[] = "^LOCUS +([a-z|A-Z|0-9|_]+) +([0-9]+) bp +([ss\-|ds\-|ms\-]*[a-z|A-Z| ]+) ([a-z| ]{8}) ([A-Z| ]{3}) ([0-9]+-[A-Z]+-[0-9]+)";
+    const char sLocus[] = "^LOCUS +([a-z|A-Z|0-9|_]+) +([0-9]+) bp +([ss-|ds-|ms-]*[a-z|A-Z| ]+) ([a-z| ]{8}) ([A-Z| ]{3}) ([0-9]+-[A-Z]+-[0-9]+)";
     const char sOneLine[] = "^ *([A-Z]+) +(.+)";
     const char sAccession[] = "^ACCESSION +([a-z|A-Z|0-9|_]+) ?";
     const char sRegion[] = " +REGION: ?([0-9]+)\\.\\.([0-9]+)";
@@ -660,7 +660,7 @@ static gb_data *_parseGBFF(FILE *FSeqFile) {
 
 /* parse sequence datas in a GBF file */
 gb_data **parseGBFF(gb_string spFileName) {
-    int iGBFSeqPos = 0;
+    unsigned int iGBFSeqPos = 0;
     unsigned int iGBFSeqNum = INITGBFSEQNUM;
     gb_data **pptGBDatas;
     FILE *FSeqFile;
@@ -696,7 +696,7 @@ gb_data **parseGBFF(gb_string spFileName) {
 }
 
 void freeGBData(gb_data **pptGBData) {
-    int i;
+    unsigned int i;
     gb_data *ptGBData = NULL;
     gb_feature *ptFeatures = NULL;
     gb_reference *ptReferences = NULL;

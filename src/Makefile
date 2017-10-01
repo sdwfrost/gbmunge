@@ -5,9 +5,9 @@ SRCS =  gbfp.c gbmunge.c
 OBJS = $(SRCS:%.c=%.o)
 
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS-add) $(CFLAGS) $(fPIC) -DNDEBUG -c $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS-add) $(CFLAGS) -c $< -o $@
 
-release debug: gbmunge
+release: gbmunge
 
 gbmunge: $(OBJS)
 	rm -rf $@

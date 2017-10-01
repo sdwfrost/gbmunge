@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <sys/types.h>
 #include <regex.h>
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
+#include <getopt.h>
 #include "gbfp.h"
 
 #define MIN3(a, b, c) ((a) < (b) ? ((a) < (c) ? (a) : (c)) : ((b) < (c) ? (b) : (c)))
@@ -100,9 +102,7 @@ void help(void) {
 }
 
 static char *getQualValue(char *sQualifier, gb_feature *ptFeature) {
-    static char *null = "";
     gb_qualifier *i;
-
     for (i = ptFeature->ptQualifier; (i - ptFeature->ptQualifier) < ptFeature->iQualifierNum; i++)
         if (strcmp(sQualifier, i->sQualifier) == 0)
             return i->sValue;
@@ -140,7 +140,11 @@ int levenshteinDistance(char *s1, char *s2) {
     return(matrix[s2len][s1len]);
 }
 
-/*
+int compareStrings(char *s1, char *s2)
+{
+for (; *s1 && *s2 && (toupper(*s1) == toupper(*s2)); ++s1, ++s2);
+return *s1 - *s2;
+}
 
 double diceMatch(const char *string1, const char *string2) {
     // https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Dice%27s_coefficient#C
@@ -162,12 +166,12 @@ double diceMatch(const char *string1, const char *string2) {
     size_t length2 = strlen2 - 1;
 
     double matches = 0;
-    int i = 0, j = 0;
+    size_t i = 0, j = 0;
 
     while (i < length1 && j < length2) {
         char a[3] = {string1[i], string1[i + 1], '\0'};
         char b[3] = {string2[j], string2[j + 1], '\0'};
-        int cmp = strcmpi(a, b);
+        int cmp = compareStrings(a, b);
         if (cmp == 0) {
             matches += 2;
         }
@@ -178,18 +182,23 @@ double diceMatch(const char *string1, const char *string2) {
     return matches / (length1 + length2);
 }
 
-*/
-
 char* uppercase ( char *sPtr )
 {
     char *sCopy = malloc (1 + strlen (sPtr));
+    int i;
     if (sCopy == NULL) return NULL; 
     strcpy(sCopy,sPtr);
-    /*while ( *sCopy != '\0' )
-    {
-    *sCopy = toupper ( ( unsigned char ) *sCopy );
-    ++sCopy;
-    } */
+    for(i=0; sCopy[i] != '\0'; i++){
+        /* Check if character in inputArray is lower Case*/
+        if(islower(sCopy[i])){
+            /* Convert lower case character to upper case 
+              using toupper function */
+            sCopy[i] = toupper(sCopy[i]);
+        } else {
+            sCopy[i] = sCopy[i];
+        }
+    }
+    sCopy[i] = '\0';
     return(sCopy);
 }
 
@@ -197,11 +206,9 @@ int main(int argc, char *argv[]) {
     char *sFileName = NULL;
     char *sFasta = NULL;
     char *sTable = NULL;
-    char *sQualifier = NULL;
     char *sDate = NULL;
     char *sCountry = NULL;
     char *sCountry2 = NULL;
-    char *sCountryCode = NULL;
     char *sHost = NULL;
     char *sNoMissingDates = NULL;
     struct tm ltm = {0};
@@ -212,12 +219,12 @@ int main(int argc, char *argv[]) {
 
     gb_data **pptSeqData, *ptSeqData;
     gb_feature *ptFeature;
-    int i,j,k,idx;
+    size_t i,j,k,idx;
 
     FILE *fFasta;
     FILE *fTable;
-
-    unsigned int iOpt;
+    
+    int iOpt;
     while((iOpt = getopt(argc, argv, "h:i:f:o:t")) != -1) {
      switch(iOpt) {
      case 'h':
@@ -325,9 +332,6 @@ int main(int argc, char *argv[]) {
         sCountry == NULL ? "NA" : countrycode[idx],
         sDate == NULL ? "NA" : sDate2
         );
-        /* if(sCountry2!=NULL) free(sCountry2);
-	if(sCountryBackup!=NULL) free(sCountryBackup);
-        if(sCountryCode!=NULL) free(sCountryCode); */
         }
       else{
         fprintf(fFasta,">%s\n%s\n",ptSeqData->sAccession,ptSeqData->sSequence);
@@ -341,9 +345,6 @@ int main(int argc, char *argv[]) {
         sCountry == NULL ? "NA" : countrycode[idx],
         sDate == NULL ? "NA" : sDate2
         );
-        /* if(sCountry2!=NULL) free(sCountry2);
-	if(sCountryBackup!=NULL) free(sCountryBackup);
-        if(sCountryCode!=NULL) free(sCountryCode); */
         }
     }
     freeGBData(pptSeqData); /* release memory space */
