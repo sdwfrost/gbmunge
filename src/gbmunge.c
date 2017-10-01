@@ -97,7 +97,7 @@ char *country[] = {"Afghanistan", "Aland Islands", "Albania", "Algeria", "Americ
 void help(void) {
         printf("Extract from a GenBank flat file.\n"
         "\n"
-        "Usage: gbmunge [-h] -i <Genbank_file> -f <sequence_output> -o <metadata_output> [-t]\n"
+        "Usage: gbmunge [-h] -i <Genbank_file> -f <sequence_output> -o <metadata_output> [-t] [-s]\n"
         "\n");
 }
 
@@ -210,7 +210,8 @@ int main(int argc, char *argv[]) {
     char *sCountry = NULL;
     char *sCountry2 = NULL;
     char *sHost = NULL;
-    char *sNoMissingDates = NULL;
+    int sNoMissingDates = 0;
+    int sIncludeSequence = 0;
     struct tm ltm = {0};
     struct tm cltm = {0};
     char sDate2[] = "2001-01-01";
@@ -225,7 +226,7 @@ int main(int argc, char *argv[]) {
     FILE *fTable;
     
     int iOpt;
-    while((iOpt = getopt(argc, argv, "h:i:f:o:t")) != -1) {
+    while((iOpt = getopt(argc, argv, "h:i:f:o:ts")) != -1) {
      switch(iOpt) {
      case 'h':
          help();
@@ -241,7 +242,10 @@ int main(int argc, char *argv[]) {
          sTable = optarg;
          break;
      case 't':
-         sNoMissingDates = optarg;
+         sNoMissingDates = 1;
+         break;
+     case 's':
+         sIncludeSequence = 1;
          break;
      default:
          help();
@@ -270,15 +274,20 @@ int main(int argc, char *argv[]) {
     pptSeqData = parseGBFF(sFileName); /* parse a GBF file which contains more than one GBF sequence data */
     fFasta = fopen(sFasta,"w");
     fTable = fopen(sTable,"w");
-    fprintf(fTable,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+    fprintf(fTable,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
     "name",
     "accession",
+    "length",
     "submission_date",
     "host",
     "country_original",
     "country",
     "countrycode",
     "collection_date");
+    if(sIncludeSequence==1){
+     fprintf(fTable,"\t%s","sequence");   
+    }
+    fprintf(fTable,"\n");
     for (i = 0; (ptSeqData = *(pptSeqData + i)) != NULL; i++) { /* ptSeqData points a parsed data of a GBF sequence data */
       for (j = 0; j < ptSeqData->iFeatureNum; j++) {
             ptFeature = (ptSeqData->ptFeatures + j);
@@ -314,36 +323,39 @@ int main(int argc, char *argv[]) {
                 }
                 }
             }
-      /* char* sSequence = uppercase(ptSeqData->sSequence);
-      fprintf(fFasta,">%s\n%s\n",ptSeqData->sAccession,sSequence);
-      free(sSequence); */
       strptime(ptSeqData->sDate,"%d-%b-%Y",&cltm);
       strftime(sCollectionDate, sizeof(sCollectionDate),"%Y-%m-%d", &cltm);
-      if(sNoMissingDates==NULL){
+      if(sNoMissingDates==0){
         fprintf(fFasta,">%s_%s\n%s\n",ptSeqData->sAccession,sDate2,ptSeqData->sSequence);
-        fprintf(fTable,"%s_%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+        fprintf(fTable,"%s_%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
         ptSeqData->sAccession,
         sDate2,
         ptSeqData->sAccession,
+        ptSeqData->lLength,
         sCollectionDate,
         sHost == NULL ? "NA" : sHost,
         sCountry == NULL ? "NA" : sCountry,
         sCountry == NULL ? "NA" : country[idx],
         sCountry == NULL ? "NA" : countrycode[idx],
-        sDate == NULL ? "NA" : sDate2
+        sDate == NULL ? "NA" : sDate2,
+        sIncludeSequence == 0 ? "" : "\t",
+        sIncludeSequence == 0 ? "" : ptSeqData->sSequence
         );
         }
       else{
         fprintf(fFasta,">%s\n%s\n",ptSeqData->sAccession,ptSeqData->sSequence);
-        fprintf(fTable,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+        fprintf(fTable,"%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
         ptSeqData->sAccession,
         ptSeqData->sAccession,
+        ptSeqData->lLength,
         sCollectionDate,
         sHost == NULL ? "NA" : sHost,
         sCountry == NULL ? "NA" : sCountry,
         sCountry == NULL ? "NA" : country[idx],
         sCountry == NULL ? "NA" : countrycode[idx],
-        sDate == NULL ? "NA" : sDate2
+        sDate == NULL ? "NA" : sDate2,
+        sIncludeSequence == 0 ? "" : "\t",
+        sIncludeSequence == 0 ? "" : ptSeqData->sSequence
         );
         }
     }
