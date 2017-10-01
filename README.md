@@ -17,7 +17,7 @@ In addition to extracting this information, dates are reformatted e.g. `31-DEC-2
 ## Usage
 
 ```sh
-gbmunge [-h] -i <Genbank_file> -f <sequence_output> -o <metadata_output> [-t]
+gbmunge [-h] -i <Genbank_file> -f <sequence_output> -o <metadata_output> [-t] [-s]
 ```
 
 - `Genbank_file`: filename of GenBank-formatted sequence file (normally downloaded as `sequence.gb`)
