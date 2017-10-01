@@ -20,7 +20,7 @@ char *country[] = {"Afghanistan", "Aland Islands", "Albania", "Algeria", "Americ
 "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", 
 "Central African Republic", "Chad", "Chile", "China", "Christmas Island", 
 "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo (Brazzaville)", 
-"Congo, (Kinshasa)", "Cook Islands", "Costa Rica", "Croatia", 
+"Democratic Republic of the Congo", "Cook Islands", "Costa Rica", "Croatia", 
 "Cuba", "Cyprus", "Czech Republic", "Côte d'Ivoire", "Denmark", 
 "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", 
 "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", 
@@ -292,14 +292,17 @@ int main(int argc, char *argv[]) {
                     }
                 }
                 sHost = getQualValue("host",ptFeature);
+                if(sHost!=NULL){
+                    sHost = strtok(sHost,";");
+                }
                 sCountry = getQualValue("country",ptFeature);
-                if(sCountry){
+                if(sCountry!=NULL){
+                    sCountry2 = malloc(1+strlen(sCountry));
+	            strcpy(sCountry2,sCountry);
+                    sCountry2 = strtok(sCountry2,":");
                     for (k=0;k < NUM_COUNTRY;k++){
-                        ld[k] = levenshteinDistance(sCountry,country[k]);
+                        ld[k] = levenshteinDistance(sCountry2,country[k]);
                         idx = minIndex(ld,NUM_COUNTRY);
-                        /* char *sCountry2 = malloc (1 + strlen (country[idx]));
-                        strcpy(sCountry2,country[idx]);
-                        char *sCountryCode = malloc(1 + strlen(countrycode[idx])) */
                     }
                 }
                 }
@@ -322,8 +325,9 @@ int main(int argc, char *argv[]) {
         sCountry == NULL ? "NA" : countrycode[idx],
         sDate == NULL ? "NA" : sDate2
         );
-        if(sCountry2) free(sCountry2);
-        if(sCountryCode) free(sCountryCode);
+        /* if(sCountry2!=NULL) free(sCountry2);
+	if(sCountryBackup!=NULL) free(sCountryBackup);
+        if(sCountryCode!=NULL) free(sCountryCode); */
         }
       else{
         fprintf(fFasta,">%s\n%s\n",ptSeqData->sAccession,ptSeqData->sSequence);
@@ -337,8 +341,9 @@ int main(int argc, char *argv[]) {
         sCountry == NULL ? "NA" : countrycode[idx],
         sDate == NULL ? "NA" : sDate2
         );
-        if(sCountry2) free(sCountry2);
-        if(sCountryCode) free(sCountryCode);
+        /* if(sCountry2!=NULL) free(sCountry2);
+	if(sCountryBackup!=NULL) free(sCountryBackup);
+        if(sCountryCode!=NULL) free(sCountryCode); */
         }
     }
     freeGBData(pptSeqData); /* release memory space */
