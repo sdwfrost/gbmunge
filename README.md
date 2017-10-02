@@ -51,10 +51,10 @@ Here are the first few lines of output in `sequence.txt`:
 
 **name**|**accession**|**length**|**submission\_date**|**host**|**country\_original**|**country**|**countrycode**|**collection\_date**
 -----|-----|-----|-----|-----|-----|-----|-----|-----
-JX869059|JX869059|30119|2012-12-04|Homo sapiens|NA|NA|NA|2012-06-13
-KC164505|KC164505|30111|2013-07-12|Homo sapiens|United Kingdom|United Kingdom|GBR|2012-09-11
-KC667074|KC667074|30112|2013-04-30|Homo sapiens|United Kingdom: England|United Kingdom|GBR|2012-09-19
-KC776174|KC776174|30030|2013-03-25|Homo sapiens|Jordan|Jordan|JOR|2012-04
+JX869059_2012-06-13|JX869059|30119|2012-12-04|Homo sapiens|NA|NA|NA|2012-06-13
+KC164505_2012-09-11|KC164505|30111|2013-07-12|Homo sapiens|United Kingdom|United Kingdom|GBR|2012-09-11
+KC667074_2012-09-19|KC667074|30112|2013-04-30|Homo sapiens|United Kingdom: England|United Kingdom|GBR|2012-09-19
+KC776174_2012-04|KC776174|30030|2013-03-25|Homo sapiens|Jordan|Jordan|JOR|2012-04
 
 ## Credits
 

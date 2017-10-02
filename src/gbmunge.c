@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
             }
       strptime(ptSeqData->sDate,"%d-%b-%Y",&cltm);
       strftime(sCollectionDate, sizeof(sCollectionDate),"%Y-%m-%d", &cltm);
-      if(sNoMissingDates==0){
+      if(sNoMissingDates==1){
         fprintf(fFasta,">%s_%s\n%s\n",ptSeqData->sAccession,sDate2,ptSeqData->sSequence);
         fprintf(fTable,"%s_%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
         ptSeqData->sAccession,
