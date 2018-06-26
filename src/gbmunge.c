@@ -12,86 +12,86 @@
 #define MIN3(a, b, c) ((a) < (b) ? ((a) < (c) ? (a) : (c)) : ((b) < (c) ? (b) : (c)))
 
 #define NUM_COUNTRY 247
-char *country[] = {"Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", 
-"Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", 
-"Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", 
-"Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", 
-"Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", 
-"Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", 
-"British Virgin Islands", "Brunei Darussalam", "Bulgaria", "Burkina Faso", 
-"Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", 
-"Central African Republic", "Chad", "Chile", "China", "Christmas Island", 
-"Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo (Brazzaville)", 
-"Democratic Republic of the Congo", "Cook Islands", "Costa Rica", "Croatia", 
-"Cuba", "Cyprus", "Czech Republic", "Côte d'Ivoire", "Denmark", 
-"Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", 
-"El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", 
-"Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", 
-"France", "French Guiana", "French Polynesia", "French Southern Territories", 
-"Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", 
-"Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", 
-"Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mcdonald Islands", 
-"Holy See (Vatican City State)", "Honduras", "Hong Kong, SAR China", 
-"Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic of", 
-"Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", 
-"Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", 
-"Korea (North)", "Korea (South)", "Kuwait", "Kyrgyzstan", "Lao PDR", 
-"Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", 
-"Lithuania", "Luxembourg", "Macao, SAR China", "Macedonia, Republic of", 
-"Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", 
-"Marshall Islands", "Martinique", "Mauritania", "Mauritius", 
-"Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova", 
-"Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", 
-"Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", 
-"Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", 
-"Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", 
-"Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory", 
-"Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", 
-"Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Romania", 
-"Russian Federation", "Rwanda", "Réunion", "Saint Helena", "Saint Kitts and Nevis", 
-"Saint Lucia", "Saint Pierre and Miquelon", "Saint Vincent and Grenadines", 
-"Saint-Barthélemy", "Saint-Martin (French part)", "Samoa", "San Marino", 
-"Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", 
-"Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", 
-"Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", 
-"South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", 
-"Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic (Syria)", 
-"Taiwan, Republic of China", "Tajikistan", "Tanzania, United Republic of", 
-"Thailand", "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", 
-"Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", 
-"Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", 
-"United States of America", "Uruguay", "US Minor Outlying Islands", 
-"Uzbekistan", "Vanuatu", "Venezuela (Bolivarian Republic)", 
-"Viet Nam", "Virgin Islands, US", "Wallis and Futuna Islands", 
+char *country[] = {"Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa",
+"Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda",
+"Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",
+"Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
+"Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina",
+"Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory",
+"British Virgin Islands", "Brunei Darussalam", "Bulgaria", "Burkina Faso",
+"Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands",
+"Central African Republic", "Chad", "Chile", "China", "Christmas Island",
+"Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo (Brazzaville)",
+"Democratic Republic of the Congo", "Cook Islands", "Costa Rica", "Croatia",
+"Cuba", "Cyprus", "Czech Republic", "Côte d'Ivoire", "Denmark",
+"Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt",
+"El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia",
+"Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland",
+"France", "French Guiana", "French Polynesia", "French Southern Territories",
+"Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar",
+"Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala",
+"Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mcdonald Islands",
+"Holy See (Vatican City State)", "Honduras", "Hong Kong, SAR China",
+"Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic of",
+"Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica",
+"Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati",
+"Korea (North)", "Korea (South)", "Kuwait", "Kyrgyzstan", "Lao PDR",
+"Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein",
+"Lithuania", "Luxembourg", "Macao, SAR China", "Macedonia, Republic of",
+"Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta",
+"Marshall Islands", "Martinique", "Mauritania", "Mauritius",
+"Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova",
+"Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco",
+"Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands",
+"Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua",
+"Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands",
+"Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory",
+"Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines",
+"Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Romania",
+"Russian Federation", "Rwanda", "Réunion", "Saint Helena", "Saint Kitts and Nevis",
+"Saint Lucia", "Saint Pierre and Miquelon", "Saint Vincent and Grenadines",
+"Saint-Barthélemy", "Saint-Martin (French part)", "Samoa", "San Marino",
+"Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia",
+"Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia",
+"Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands",
+"South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands",
+"Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic (Syria)",
+"Taiwan, Republic of China", "Tajikistan", "Tanzania, United Republic of",
+"Thailand", "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago",
+"Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands",
+"Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom",
+"United States of America", "Uruguay", "US Minor Outlying Islands",
+"Uzbekistan", "Vanuatu", "Venezuela (Bolivarian Republic)",
+"Viet Nam", "Virgin Islands, US", "Wallis and Futuna Islands",
 "Western Sahara", "Yemen", "Zambia", "Zimbabwe"};
 
- char *countrycode[]={"AFG", "ALA", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA", 
- "ATG", "ARG", "ARM", "ABW", "AUS", "AUT", "AZE", "BHS", "BHR", 
- "BGD", "BRB", "BLR", "BEL", "BLZ", "BEN", "BMU", "BTN", "BOL", 
- "BIH", "BWA", "BVT", "BRA", "IOT", "VGB", "BRN", "BGR", "BFA", 
- "BDI", "KHM", "CMR", "CAN", "CPV", "CYM", "CAF", "TCD", "CHL", 
- "CHN", "CXR", "CCK", "COL", "COM", "COG", "COD", "COK", "CRI", 
- "HRV", "CUB", "CYP", "CZE", "CIV", "DNK", "DJI", "DMA", "DOM", 
- "ECU", "EGY", "SLV", "GNQ", "ERI", "EST", "ETH", "FLK", "FRO", 
- "FJI", "FIN", "FRA", "GUF", "PYF", "ATF", "GAB", "GMB", "GEO", 
- "DEU", "GHA", "GIB", "GRC", "GRL", "GRD", "GLP", "GUM", "GTM", 
- "GGY", "GIN", "GNB", "GUY", "HTI", "HMD", "VAT", "HND", "HKG", 
- "HUN", "ISL", "IND", "IDN", "IRN", "IRQ", "IRL", "IMN", "ISR", 
- "ITA", "JAM", "JPN", "JEY", "JOR", "KAZ", "KEN", "KIR", "PRK", 
- "KOR", "KWT", "KGZ", "LAO", "LVA", "LBN", "LSO", "LBR", "LBY", 
- "LIE", "LTU", "LUX", "MAC", "MKD", "MDG", "MWI", "MYS", "MDV", 
- "MLI", "MLT", "MHL", "MTQ", "MRT", "MUS", "MYT", "MEX", "FSM", 
- "MDA", "MCO", "MNG", "MNE", "MSR", "MAR", "MOZ", "MMR", "NAM", 
- "NRU", "NPL", "NLD", "ANT", "NCL", "NZL", "NIC", "NER", "NGA", 
- "NIU", "NFK", "MNP", "NOR", "OMN", "PAK", "PLW", "PSE", "PAN", 
- "PNG", "PRY", "PER", "PHL", "PCN", "POL", "PRT", "PRI", "QAT", 
- "ROU", "RUS", "RWA", "REU", "SHN", "KNA", "LCA", "SPM", "VCT", 
- "BLM", "MAF", "WSM", "SMR", "STP", "SAU", "SEN", "SRB", "SYC", 
- "SLE", "SGP", "SVK", "SVN", "SLB", "SOM", "ZAF", "SGS", "SSD", 
- "ESP", "LKA", "SDN", "SUR", "SJM", "SWZ", "SWE", "CHE", "SYR", 
- "TWN", "TJK", "TZA", "THA", "TLS", "TGO", "TKL", "TON", "TTO", 
- "TUN", "TUR", "TKM", "TCA", "TUV", "UGA", "UKR", "ARE", "GBR", 
- "USA", "URY", "UMI", "UZB", "VUT", "VEN", "VNM", "VIR", "WLF", 
+ char *countrycode[]={"AFG", "ALA", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA",
+ "ATG", "ARG", "ARM", "ABW", "AUS", "AUT", "AZE", "BHS", "BHR",
+ "BGD", "BRB", "BLR", "BEL", "BLZ", "BEN", "BMU", "BTN", "BOL",
+ "BIH", "BWA", "BVT", "BRA", "IOT", "VGB", "BRN", "BGR", "BFA",
+ "BDI", "KHM", "CMR", "CAN", "CPV", "CYM", "CAF", "TCD", "CHL",
+ "CHN", "CXR", "CCK", "COL", "COM", "COG", "COD", "COK", "CRI",
+ "HRV", "CUB", "CYP", "CZE", "CIV", "DNK", "DJI", "DMA", "DOM",
+ "ECU", "EGY", "SLV", "GNQ", "ERI", "EST", "ETH", "FLK", "FRO",
+ "FJI", "FIN", "FRA", "GUF", "PYF", "ATF", "GAB", "GMB", "GEO",
+ "DEU", "GHA", "GIB", "GRC", "GRL", "GRD", "GLP", "GUM", "GTM",
+ "GGY", "GIN", "GNB", "GUY", "HTI", "HMD", "VAT", "HND", "HKG",
+ "HUN", "ISL", "IND", "IDN", "IRN", "IRQ", "IRL", "IMN", "ISR",
+ "ITA", "JAM", "JPN", "JEY", "JOR", "KAZ", "KEN", "KIR", "PRK",
+ "KOR", "KWT", "KGZ", "LAO", "LVA", "LBN", "LSO", "LBR", "LBY",
+ "LIE", "LTU", "LUX", "MAC", "MKD", "MDG", "MWI", "MYS", "MDV",
+ "MLI", "MLT", "MHL", "MTQ", "MRT", "MUS", "MYT", "MEX", "FSM",
+ "MDA", "MCO", "MNG", "MNE", "MSR", "MAR", "MOZ", "MMR", "NAM",
+ "NRU", "NPL", "NLD", "ANT", "NCL", "NZL", "NIC", "NER", "NGA",
+ "NIU", "NFK", "MNP", "NOR", "OMN", "PAK", "PLW", "PSE", "PAN",
+ "PNG", "PRY", "PER", "PHL", "PCN", "POL", "PRT", "PRI", "QAT",
+ "ROU", "RUS", "RWA", "REU", "SHN", "KNA", "LCA", "SPM", "VCT",
+ "BLM", "MAF", "WSM", "SMR", "STP", "SAU", "SEN", "SRB", "SYC",
+ "SLE", "SGP", "SVK", "SVN", "SLB", "SOM", "ZAF", "SGS", "SSD",
+ "ESP", "LKA", "SDN", "SUR", "SJM", "SWZ", "SWE", "CHE", "SYR",
+ "TWN", "TJK", "TZA", "THA", "TLS", "TGO", "TKL", "TON", "TTO",
+ "TUN", "TUR", "TKM", "TCA", "TUV", "UGA", "UKR", "ARE", "GBR",
+ "USA", "URY", "UMI", "UZB", "VUT", "VEN", "VNM", "VIR", "WLF",
  "ESH", "YEM", "ZMB", "ZWE"};
 
 void help(void) {
@@ -186,12 +186,12 @@ char* uppercase ( char *sPtr )
 {
     char *sCopy = malloc (1 + strlen (sPtr));
     int i;
-    if (sCopy == NULL) return NULL; 
+    if (sCopy == NULL) return NULL;
     strcpy(sCopy,sPtr);
     for(i=0; sCopy[i] != '\0'; i++){
         /* Check if character in inputArray is lower Case*/
         if(islower(sCopy[i])){
-            /* Convert lower case character to upper case 
+            /* Convert lower case character to upper case
               using toupper function */
             sCopy[i] = toupper(sCopy[i]);
         } else {
@@ -216,7 +216,7 @@ int main(int argc, char *argv[]) {
     struct tm cltm = {0};
     char sDate2[] = "2001-01-01";
     char sCollectionDate[] = "2001-01-01";
-    int ld[NUM_COUNTRY]; 
+    int ld[NUM_COUNTRY];
 
     gb_data **pptSeqData, *ptSeqData;
     gb_feature *ptFeature;
@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
 
     FILE *fFasta;
     FILE *fTable;
-    
+
     int iOpt;
     while((iOpt = getopt(argc, argv, "h:i:f:o:ts")) != -1) {
      switch(iOpt) {
@@ -274,7 +274,7 @@ int main(int argc, char *argv[]) {
     pptSeqData = parseGBFF(sFileName); /* parse a GBF file which contains more than one GBF sequence data */
     fFasta = fopen(sFasta,"w");
     fTable = fopen(sTable,"w");
-    fprintf(fTable,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+    fprintf(fTable,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
     "name",
     "accession",
     "length",
@@ -283,9 +283,10 @@ int main(int argc, char *argv[]) {
     "country_original",
     "country",
     "countrycode",
+    "collection_original",
     "collection_date");
     if(sIncludeSequence==1){
-     fprintf(fTable,"\t%s","sequence");   
+     fprintf(fTable,"\t%s","sequence");
     }
     fprintf(fTable,"\n");
     for (i = 0; (ptSeqData = *(pptSeqData + i)) != NULL; i++) { /* ptSeqData points a parsed data of a GBF sequence data */
@@ -296,10 +297,31 @@ int main(int argc, char *argv[]) {
                 if(sDate!=NULL){
                     if(strlen(sDate)==11){
                         strptime(sDate, "%d-%b-%Y", &ltm);
-                        strftime(sDate2, sizeof(sDate2), "%Y-%m-%d", &ltm); 
+                        strftime(sDate2, sizeof(sDate2), "%Y-%m-%d", &ltm);
+                    }
+                    if(strlen(sDate)==10){
+                        if(strncmp(&sDate[4],"-",1)==0){
+                          strptime(sDate, "%Y-%m-%d", &ltm);
+                        }else{
+                          strptime(sDate, "%d-%m-%Y", &ltm);
+                        }
+                        strftime(sDate2, sizeof(sDate2), "%Y-%m-%d", &ltm);
                     }
                     if(strlen(sDate)==8){
-                        strptime(sDate, "%b-%Y", &ltm);
+                        if(strncmp(&sDate[4],"-",1)==0){
+                          strptime(sDate, "%Y-%b", &ltm);
+                        }
+                        else{
+                          strptime(sDate, "%b-%Y", &ltm);
+                        }
+                        strftime(sDate2, sizeof(sDate2), "%Y-%m", &ltm);
+                    }
+                    if(strlen(sDate)==7){
+                        if(strncmp(&sDate[4],"-",1)==0){
+                          strptime(sDate, "%Y-%m", &ltm);
+                        }else{
+                          strptime(sDate, "%m-%Y", &ltm);
+                        }
                         strftime(sDate2, sizeof(sDate2), "%Y-%m", &ltm);
                     }
                     if(strlen(sDate)==4){
@@ -327,7 +349,7 @@ int main(int argc, char *argv[]) {
       strftime(sCollectionDate, sizeof(sCollectionDate),"%Y-%m-%d", &cltm);
       if(sNoMissingDates==1){
         fprintf(fFasta,">%s_%s\n%s\n",ptSeqData->sAccession,sDate2,ptSeqData->sSequence);
-        fprintf(fTable,"%s_%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
+        fprintf(fTable,"%s_%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
         ptSeqData->sAccession,
         sDate2,
         ptSeqData->sAccession,
@@ -337,6 +359,7 @@ int main(int argc, char *argv[]) {
         sCountry == NULL ? "NA" : sCountry,
         sCountry == NULL ? "NA" : country[idx],
         sCountry == NULL ? "NA" : countrycode[idx],
+        sDate == NULL ? "NA" : sDate,
         sDate == NULL ? "NA" : sDate2,
         sIncludeSequence == 0 ? "" : "\t",
         sIncludeSequence == 0 ? "" : ptSeqData->sSequence
@@ -344,7 +367,7 @@ int main(int argc, char *argv[]) {
         }
       else{
         fprintf(fFasta,">%s\n%s\n",ptSeqData->sAccession,ptSeqData->sSequence);
-        fprintf(fTable,"%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
+        fprintf(fTable,"%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
         ptSeqData->sAccession,
         ptSeqData->sAccession,
         ptSeqData->lLength,
@@ -353,6 +376,7 @@ int main(int argc, char *argv[]) {
         sCountry == NULL ? "NA" : sCountry,
         sCountry == NULL ? "NA" : country[idx],
         sCountry == NULL ? "NA" : countrycode[idx],
+        sDate == NULL ? "NA" : sDate,
         sDate == NULL ? "NA" : sDate2,
         sIncludeSequence == 0 ? "" : "\t",
         sIncludeSequence == 0 ? "" : ptSeqData->sSequence

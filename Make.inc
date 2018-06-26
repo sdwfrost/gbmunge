@@ -17,4 +17,3 @@ ifeq ($(USEGCC),1)
 CC = gcc
 CFLAGS-add += -D__USE_XOPEN -D_GNU_SOURCE
 endif
-
