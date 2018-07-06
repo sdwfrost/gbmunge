@@ -214,8 +214,8 @@ int main(int argc, char *argv[]) {
     int sIncludeSequence = 0;
     struct tm ltm = {0};
     struct tm cltm = {0};
-    char sDate2[] = "2001-01-01";
-    char sCollectionDate[] = "2001-01-01";
+    char sDate2[] = "0001-01-01";
+    char sCollectionDate[] = "0001-01-01";
     int ld[NUM_COUNTRY];
 
     gb_data **pptSeqData, *ptSeqData;
@@ -348,6 +348,7 @@ int main(int argc, char *argv[]) {
       strptime(ptSeqData->sDate,"%d-%b-%Y",&cltm);
       strftime(sCollectionDate, sizeof(sCollectionDate),"%Y-%m-%d", &cltm);
       if(sNoMissingDates==1){
+        if(sDate != NULL){
         fprintf(fFasta,">%s_%s\n%s\n",ptSeqData->sAccession,sDate2,ptSeqData->sSequence);
         fprintf(fTable,"%s_%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
         ptSeqData->sAccession,
@@ -359,12 +360,13 @@ int main(int argc, char *argv[]) {
         sCountry == NULL ? "NA" : sCountry,
         sCountry == NULL ? "NA" : country[idx],
         sCountry == NULL ? "NA" : countrycode[idx],
-        sDate == NULL ? "NA" : sDate,
-        sDate == NULL ? "NA" : sDate2,
+        sDate,
+        sDate2,
         sIncludeSequence == 0 ? "" : "\t",
         sIncludeSequence == 0 ? "" : ptSeqData->sSequence
         );
         }
+      }
       else{
         fprintf(fFasta,">%s\n%s\n",ptSeqData->sAccession,ptSeqData->sSequence);
         fprintf(fTable,"%s\t%s\t%lu\t%s\t%s\t%s\t%s\t%s\t%s\t%s%s%s\n",
