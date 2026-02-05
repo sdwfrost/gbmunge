@@ -9,7 +9,7 @@ This little C program will extract the following information from a GenBank file
 - length
 - submission date
 - host
-- country
+- country (supports both `/country` and `/geo_loc_name` qualifiers)
 - collection date
 
 In addition to extracting this information, dates are reformatted e.g. `31-DEC-2001` becomes `2001-12-31`, which makes them more digestible to downstream software like BEAST, and country names are cleaned and matched to ISO3 codes.
@@ -30,6 +30,8 @@ gbmunge [-h] -i <Genbank_file> -f <sequence_output> -o <metadata_output> [-t] [-
 
 ## Building
 
+### Linux and macOS
+
 ```sh
 git clone https://github.com/sdwfrost/gbmunge
 cd gbmunge
@@ -37,6 +39,40 @@ make
 ```
 
 This will build `gbmunge` in the `src/` directory. Add the directory to the path, or move the executable somewhere.
+
+### Windows
+
+There are several options for building on Windows:
+
+1. **Using WSL (Windows Subsystem for Linux)** (Recommended):
+   ```sh
+   # Install WSL with Ubuntu, then in the WSL terminal:
+   sudo apt update
+   sudo apt install build-essential
+   cd gbmunge
+   make
+   ```
+
+2. **Using MSYS2/MinGW**:
+   ```sh
+   # Install MSYS2, then in MSYS2 terminal:
+   pacman -S mingw-w64-x86_64-gcc make
+   cd gbmunge
+   make
+   ```
+
+3. **Using Visual Studio with vcpkg**:
+   Building natively with MSVC requires a POSIX-compatible regex library:
+   ```sh
+   # Install PCRE2 via vcpkg
+   vcpkg install pcre2:x64-windows
+   
+   # Compile with PCRE2 support (modify Makefile or compile manually)
+   cl /DGBMUNGE_USE_PCRE2 /I<vcpkg_include_path> gbfp.c gbmunge.c /link pcre2-8.lib
+   ```
+
+4. **Using TRE regex library**:
+   Download TRE from https://github.com/laurikari/tre and place the POSIX-compatible `regex.h` in the `src/` directory.
 
 ## Testing
 

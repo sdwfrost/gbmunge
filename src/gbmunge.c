@@ -1,16 +1,158 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <sys/types.h>
-#include <regex.h>
-#include <unistd.h>
 #include <string.h>
 #include <time.h>
-#include <getopt.h>
 #include "gbfp.h"
 #include "countrycodes.h"
 
+/* Platform-specific includes and definitions */
+#ifdef _WIN32
+    #include <windows.h>
+    #define strcasecmp _stricmp
+#else
+    #include <sys/types.h>
+    #include <unistd.h>
+    #include <getopt.h>
+#endif
+
 #define MIN3(a, b, c) ((a) < (b) ? ((a) < (c) ? (a) : (c)) : ((b) < (c) ? (b) : (c)))
+
+/* Portable strptime implementation for Windows */
+#ifdef _WIN32
+static const char *month_names[] = {
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
+
+static int parse_month(const char *str) {
+    for (int i = 0; i < 12; i++) {
+        if (_strnicmp(str, month_names[i], 3) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* Simple strptime implementation supporting formats used in this program */
+static char *strptime_portable(const char *s, const char *format, struct tm *tm) {
+    memset(tm, 0, sizeof(struct tm));
+    
+    if (strcmp(format, "%d-%b-%Y") == 0) {
+        /* Format: 01-Jan-2020 */
+        int day, year;
+        char mon[4] = {0};
+        if (sscanf(s, "%d-%3s-%d", &day, mon, &year) == 3) {
+            tm->tm_mday = day;
+            tm->tm_mon = parse_month(mon);
+            tm->tm_year = year - 1900;
+            return (char *)(s + strlen(s));
+        }
+    } else if (strcmp(format, "%Y-%m-%d") == 0) {
+        /* Format: 2020-01-15 */
+        int year, mon, day;
+        if (sscanf(s, "%d-%d-%d", &year, &mon, &day) == 3) {
+            tm->tm_year = year - 1900;
+            tm->tm_mon = mon - 1;
+            tm->tm_mday = day;
+            return (char *)(s + strlen(s));
+        }
+    } else if (strcmp(format, "%d-%m-%Y") == 0) {
+        /* Format: 15-01-2020 */
+        int day, mon, year;
+        if (sscanf(s, "%d-%d-%d", &day, &mon, &year) == 3) {
+            tm->tm_mday = day;
+            tm->tm_mon = mon - 1;
+            tm->tm_year = year - 1900;
+            return (char *)(s + strlen(s));
+        }
+    } else if (strcmp(format, "%Y-%b") == 0) {
+        /* Format: 2020-Jan */
+        int year;
+        char mon[4] = {0};
+        if (sscanf(s, "%d-%3s", &year, mon) == 2) {
+            tm->tm_year = year - 1900;
+            tm->tm_mon = parse_month(mon);
+            tm->tm_mday = 1;
+            return (char *)(s + strlen(s));
+        }
+    } else if (strcmp(format, "%b-%Y") == 0) {
+        /* Format: Jan-2020 */
+        int year;
+        char mon[4] = {0};
+        if (sscanf(s, "%3s-%d", mon, &year) == 2) {
+            tm->tm_mon = parse_month(mon);
+            tm->tm_year = year - 1900;
+            tm->tm_mday = 1;
+            return (char *)(s + strlen(s));
+        }
+    } else if (strcmp(format, "%Y-%m") == 0) {
+        /* Format: 2020-01 */
+        int year, mon;
+        if (sscanf(s, "%d-%d", &year, &mon) == 2) {
+            tm->tm_year = year - 1900;
+            tm->tm_mon = mon - 1;
+            tm->tm_mday = 1;
+            return (char *)(s + strlen(s));
+        }
+    } else if (strcmp(format, "%m-%Y") == 0) {
+        /* Format: 01-2020 */
+        int mon, year;
+        if (sscanf(s, "%d-%d", &mon, &year) == 2) {
+            tm->tm_mon = mon - 1;
+            tm->tm_year = year - 1900;
+            tm->tm_mday = 1;
+            return (char *)(s + strlen(s));
+        }
+    } else if (strcmp(format, "%Y") == 0) {
+        /* Format: 2020 */
+        int year;
+        if (sscanf(s, "%d", &year) == 1) {
+            tm->tm_year = year - 1900;
+            tm->tm_mon = 0;
+            tm->tm_mday = 1;
+            return (char *)(s + strlen(s));
+        }
+    }
+    return NULL;
+}
+
+/* Simple getopt implementation for Windows */
+static char *optarg = NULL;
+static int optind = 1;
+
+static int getopt(int argc, char *const argv[], const char *optstring) {
+    if (optind >= argc || argv[optind][0] != '-' || argv[optind][1] == '\0') {
+        return -1;
+    }
+    
+    char opt = argv[optind][1];
+    const char *p = strchr(optstring, opt);
+    
+    if (p == NULL) {
+        optind++;
+        return '?';
+    }
+    
+    if (*(p + 1) == ':') {
+        /* Option requires argument */
+        if (argv[optind][2] != '\0') {
+            optarg = &argv[optind][2];
+        } else if (optind + 1 < argc) {
+            optind++;
+            optarg = argv[optind];
+        } else {
+            optind++;
+            return '?';
+        }
+    }
+    
+    optind++;
+    return opt;
+}
+
+#define strptime strptime_portable
+#endif /* _WIN32 */
 
 void help(void) {
         printf("Extract from a GenBank flat file.\n"
@@ -43,19 +185,33 @@ int minIndex(int *a, int n){
 int levenshteinDistance(char *s1, char *s2) {
    // https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#C
     unsigned int x, y, s1len, s2len;
+    unsigned int *matrix;
+    unsigned int result;
+    
     s1len = strlen(s1);
     s2len = strlen(s2);
-    unsigned int matrix[s2len+1][s1len+1];
-    matrix[0][0] = 0;
+    
+    /* Allocate matrix dynamically for Windows compatibility (no VLA) */
+    matrix = (unsigned int *)malloc((s2len + 1) * (s1len + 1) * sizeof(unsigned int));
+    if (matrix == NULL) return -1;
+    
+    #define MATRIX(row, col) matrix[(row) * (s1len + 1) + (col)]
+    
+    MATRIX(0, 0) = 0;
     for (x = 1; x <= s2len; x++)
-        matrix[x][0] = matrix[x-1][0] + 1;
+        MATRIX(x, 0) = MATRIX(x-1, 0) + 1;
     for (y = 1; y <= s1len; y++)
-        matrix[0][y] = matrix[0][y-1] + 1;
+        MATRIX(0, y) = MATRIX(0, y-1) + 1;
     for (x = 1; x <= s2len; x++)
         for (y = 1; y <= s1len; y++)
-            matrix[x][y] = MIN3(matrix[x-1][y] + 1, matrix[x][y-1] + 1, matrix[x-1][y-1] + (s1[y-1] == s2[x-1] ? 0 : 1));
+            MATRIX(x, y) = MIN3(MATRIX(x-1, y) + 1, MATRIX(x, y-1) + 1, MATRIX(x-1, y-1) + (s1[y-1] == s2[x-1] ? 0 : 1));
 
-    return(matrix[s2len][s1len]);
+    result = MATRIX(s2len, s1len);
+    
+    #undef MATRIX
+    free(matrix);
+    
+    return (int)result;
 }
 
 int compareStrings(char *s1, char *s2)
@@ -208,6 +364,7 @@ int main(int argc, char *argv[]) {
     }
     fprintf(fTable,"\n");
     for (i = 0; (ptSeqData = *(pptSeqData + i)) != NULL; i++) { /* ptSeqData points a parsed data of a GBF sequence data */
+      sCountry2 = NULL;  /* Reset for each sequence */
       for (j = 0; j < ptSeqData->iFeatureNum; j++) {
             ptFeature = (ptSeqData->ptFeatures + j);
             if (strcmp("source", ptFeature->sFeature) == 0) {
@@ -252,7 +409,13 @@ int main(int argc, char *argv[]) {
                     sHost = strtok(sHost,";");
                 }
                 sCountry = getQualValue("country",ptFeature);
+                if(sCountry==NULL){
+                    sCountry = getQualValue("geo_loc_name",ptFeature);
+                }
                 if(sCountry!=NULL){
+                    if(sCountry2 != NULL) {
+                        free(sCountry2);  /* Free previous allocation */
+                    }
                     sCountry2 = malloc(1+strlen(sCountry));
 	                strcpy(sCountry2,sCountry);
                     sCountry2 = strtok(sCountry2,":");
@@ -302,6 +465,11 @@ int main(int argc, char *argv[]) {
         sIncludeSequence == 0 ? "" : ptSeqData->sSequence
         );
         }
+      /* Free allocated memory for this sequence */
+      if(sCountry2 != NULL) {
+          free(sCountry2);
+          sCountry2 = NULL;
+      }
     }
     freeGBData(pptSeqData); /* release memory space */
     fclose(fTable);

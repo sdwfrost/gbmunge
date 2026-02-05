@@ -2,12 +2,27 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <regex.h>
-#include <unistd.h>
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
-#include <sys/types.h>
+
+#ifdef _WIN32
+    #include <windows.h>
+    /* For Windows, use PCRE2 or bundled regex - user must install PCRE2 */
+    /* Alternatively, define GBMUNGE_USE_PCRE2 and link with pcre2 */
+    #ifdef GBMUNGE_USE_PCRE2
+        #define PCRE2_CODE_UNIT_WIDTH 8
+        #include <pcre2.h>
+        /* PCRE2 wrapper - would need implementation */
+    #else
+        /* Fallback: use bundled regex implementation or TRE */
+        #include "regex.h"  /* User must provide POSIX-compatible regex.h for Windows */
+    #endif
+#else
+    #include <regex.h>
+    #include <unistd.h>
+    #include <sys/types.h>
+#endif
  
 #include "gbfp.h"
 
@@ -54,6 +69,9 @@ void freeRegEx(void) {
     regfree(&ptRegExRegion);
     regfree(&ptRegExGI);
 }
+
+/* Forward declaration for freeSingleGBData */
+static void freeSingleGBData(gb_data *ptGBData);
 
 /* Removes white spaces at end of a string */
 static void rtrim(gb_string sLine) {
@@ -640,7 +658,7 @@ static gb_data *_parseGBFF(FILE *FSeqFile) {
    
     /* Parse LOCUS line */ 
     if (parseLocus(sLine, ptGBData) != 0) {
-        free(ptGBData);
+        freeSingleGBData(ptGBData);
         return NULL;
     }
 
@@ -695,23 +713,21 @@ gb_data **parseGBFF(gb_string spFileName) {
     return pptGBDatas;
 }
 
-void freeGBData(gb_data **pptGBData) {
+/* Free a single gb_data structure and all its contents */
+static void freeSingleGBData(gb_data *ptGBData) {
     unsigned int i;
-    gb_data *ptGBData = NULL;
     gb_feature *ptFeatures = NULL;
     gb_reference *ptReferences = NULL;
     unsigned int iFeatureNum = 0;
     unsigned int iReferenceNum = 0;
-    unsigned int iSeqPos = 0;
-  
-    for (iSeqPos = 0; *(pptGBData + iSeqPos) != NULL; iSeqPos++) {
-        ptGBData = *(pptGBData + iSeqPos);
 
-        ptFeatures = ptGBData->ptFeatures;
-        iFeatureNum = ptGBData->iFeatureNum;
+    if (ptGBData == NULL) return;
 
+    ptFeatures = ptGBData->ptFeatures;
+    iFeatureNum = ptGBData->iFeatureNum;
 
-        /* Release memory space for features */    
+    /* Release memory space for features */    
+    if (ptFeatures != NULL) {
         for (i = 0; i < iFeatureNum; i++) {
             free((ptFeatures + i)->ptLocation);
             if ((ptFeatures + i)->ptQualifier != NULL) {
@@ -719,12 +735,13 @@ void freeGBData(gb_data **pptGBData) {
                 free((ptFeatures + i)->ptQualifier);
             }
         }
-
         free(ptFeatures);
+    }
 
-        /* Release memory space for References */
-        ptReferences = ptGBData->ptReferences;
-        iReferenceNum = ptGBData->iReferenceNum;
+    /* Release memory space for References */
+    ptReferences = ptGBData->ptReferences;
+    iReferenceNum = ptGBData->iReferenceNum;
+    if (ptReferences != NULL) {
         for (i = 0; i < iReferenceNum; i++) {
             free((ptReferences + i)->sAuthors);
             free((ptReferences + i)->sConsrtm);
@@ -735,19 +752,29 @@ void freeGBData(gb_data **pptGBData) {
             free((ptReferences + i)->sRemark);
         }
         free(ptReferences);
+    }
 
-        free(ptGBData->sDef);
-        free(ptGBData->sAccession);
-        free(ptGBData->sComment);
-        free(ptGBData->sGI);
-        free(ptGBData->sKeywords);
-        free(ptGBData->sLineage);
-        free(ptGBData->sOrganism);
-        free(ptGBData->sSequence);
-        free(ptGBData->sSource);
-        free(ptGBData->sVersion);
+    free(ptGBData->sDef);
+    free(ptGBData->sAccession);
+    free(ptGBData->sComment);
+    free(ptGBData->sGI);
+    free(ptGBData->sKeywords);
+    free(ptGBData->sLineage);
+    free(ptGBData->sOrganism);
+    free(ptGBData->sSequence);
+    free(ptGBData->sSource);
+    free(ptGBData->sVersion);
 
-        free(ptGBData);
+    free(ptGBData);
+}
+
+void freeGBData(gb_data **pptGBData) {
+    unsigned int iSeqPos = 0;
+  
+    if (pptGBData == NULL) return;
+
+    for (iSeqPos = 0; *(pptGBData + iSeqPos) != NULL; iSeqPos++) {
+        freeSingleGBData(*(pptGBData + iSeqPos));
     }
 
     free(pptGBData);
